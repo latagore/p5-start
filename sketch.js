@@ -33,7 +33,7 @@ function setup() {
 function calculateV1Repulsion(v1, v2) {
   var diff = v1.sub(v2);
   var diffSize = diff.magnitude();
-  var repulsionAmount = Math.min(0.01, 1/diffSize/diffSize);
+  var repulsionAmount = Math.min(0.01, 0.1/diffSize/diffSize);
   var repulsionVector = diff.scale(repulsionAmount / diffSize);
   return repulsionVector;
 }
@@ -66,7 +66,7 @@ function draw() {
     dir.addSelf(groundAttractionVector);
     console.log(groundAttractionVector);
     
-    var repulsion = toxi.geom.Vec2D.ZERO;
+    var repulsion = new toxi.geom.Vec2D();
     // modify the direction by repulsing away from existing bolt heads
     bolts.forEach(function (otherBolt, j) {
       // don't include the current bolt
@@ -100,5 +100,7 @@ function draw() {
     var curr = bolt[bolt.length-1];
     var prev = bolt[bolt.length-2];
     line(curr.x, curr.y, prev.x, prev.y);
+    stroke("red");
+    line(curr.x, curr.y, curr.x + repulsion.x * 1000, curr.y + repulsion.y * 1000);
   });
 }
