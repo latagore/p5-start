@@ -4,7 +4,7 @@ var width = 300;
 var height = 1000;
 var x = width / 2;
 var y = 0;
-var strength = 5;
+var strength = 2;
 var fragmentMinScale = 1;
 var fragmentMaxScale = 1.5;
 var forkChance = 0.1;
@@ -12,7 +12,7 @@ var forkThreshold = 0.1;
 var forkAngle = Math.PI / 4;
 var strengthCutoffThreshold = 0.01;
 var groundAttractionVector = new toxi.geom.Vec2D(0,0.1);
-
+var counter = 0;
 var bolts = [];
 
 function setup() {
@@ -33,12 +33,13 @@ function setup() {
 function calculateV1Repulsion(v1, v2) {
   var diff = v1.sub(v2);
   var diffSize = diff.magnitude();
-  var repulsionAmount = Math.min(0.01, 0.1/diffSize/diffSize);
+  var repulsionAmount = Math.min(0.1, 50/diffSize/diffSize);
   var repulsionVector = diff.scale(repulsionAmount / diffSize);
   return repulsionVector;
 }
 
 function draw() {
+  counter++;
   console.log(bolts.length)
   if (bolts.length === 0) {
     noLoop();
@@ -96,11 +97,13 @@ function draw() {
     newPoint.y += dir.y;
     bolt.push(newPoint);
     
-    stroke(0 + 135 * (1 - bolt.strength));
+    stroke(0 + 200 * (1 - bolt.strength));
     var curr = bolt[bolt.length-1];
     var prev = bolt[bolt.length-2];
     line(curr.x, curr.y, prev.x, prev.y);
-    stroke("red");
-    line(curr.x, curr.y, curr.x + repulsion.x * 1000, curr.y + repulsion.y * 1000);
+    if (counter % 10 === 0) {
+//      stroke("red");
+//      line(curr.x, curr.y, curr.x + repulsion.x * 100, curr.y + repulsion.y * 100);
+    }
   });
 }
