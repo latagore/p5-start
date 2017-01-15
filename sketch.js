@@ -4,14 +4,14 @@ var width = 300;
 var height = 1000;
 var x = width / 2;
 var y = 0;
-var strength = 2;
+var strength = 4;
 var fragmentMinScale = 1;
-var fragmentMaxScale = 1.5;
-var forkChance = 0.1;
-var forkThreshold = 0.1;
-var forkAngle = Math.PI / 4;
+var fragmentMaxScale = 2;
+var forkChance = 0.5;
+var forkThreshold = 0.5;
+var forkAngle = Math.PI / 8;
 var strengthCutoffThreshold = 0.01;
-var groundAttractionVector = new toxi.geom.Vec2D(0,0.1);
+var groundAttractionVector = new toxi.geom.Vec2D(0,1);
 var counter = 0;
 var bolts = [];
 
@@ -50,13 +50,15 @@ function draw() {
       // remove bolt when the strength is too low
       bolts.splice(i, 1);
     }
+    bolt.strength -= 0.0001;
+    
     var currPoint = bolt[bolt.length - 1];
     
     // generate a random angle based on perlin noise
     var noise = perlin.noise( currPoint.x, currPoint.y ) * 0.9 + Math.random() * 0.1;
     var angleNoise = noise - 0.5;
-    var angle = angleNoise * strength;
-    angle += bolt.angle;
+    var deviationAngle = angleNoise * strength;
+    var angle = deviationAngle + bolt.angle;
     var dir = toxi.geom.Vec2D.fromTheta( angle );
     
     // scale the movement of the random noise
